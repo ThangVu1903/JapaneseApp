@@ -1,34 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:japaneseleansflutter/constants/colors.dart';
 import 'package:japaneseleansflutter/page/home.dart';
 import 'package:japaneseleansflutter/page/signup.dart';
 import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
-    );
-  }
+  State<Login> createState() => _Login();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePage();
-}
-
-class _MyHomePage extends State<MyHomePage> {
+class _Login extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
 
@@ -47,7 +32,7 @@ class _MyHomePage extends State<MyHomePage> {
           child: Container(
             width: size.width,
             height: size.height,
-            color: const Color.fromARGB(156, 255, 200, 91),
+            color: yellow_1,
             child: Column(
               children: [
                 Padding(
@@ -278,7 +263,7 @@ class _MyHomePage extends State<MyHomePage> {
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const Home()),
+        MaterialPageRoute(builder: (_) => Home()),
       );
     } else {
       // Đăng nhập thất bại

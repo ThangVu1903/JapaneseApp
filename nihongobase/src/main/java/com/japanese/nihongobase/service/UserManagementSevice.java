@@ -33,7 +33,7 @@ public class UserManagementSevice {
             user.setEmail(registrationRequest.getEmail());
             user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
             user.setUsername(registrationRequest.getUsername());
-            user.setRole(User.Role.user);
+            user.setRole("USER");
 
             User userResult = userRepository.save(user);
             if(userResult.getUserId()>0){

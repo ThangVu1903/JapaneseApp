@@ -19,7 +19,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name ="user")
+@Table(name = "user")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,13 +28,12 @@ public class User implements UserDetails {
     private String email;
     private String username;
     private String password;
-    private Role role;
+    private String role;
 
-    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role.toString())); // Chuyển đổi enum thành chuỗi
+        authorities.add(new SimpleGrantedAuthority(role)); // Chuyển đổi enum thành chuỗi
         return authorities;
     }
 
@@ -58,10 +57,4 @@ public class User implements UserDetails {
         return true; // Tài khoản được kích hoạt
     }
 
-    public enum Role{
-        user,
-        admin
-    }
 }
-
-

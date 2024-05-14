@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 import com.japanese.nihongobase.repository.UserRepository;
 
 @Service
-public class JapanUserDetailsService implements UserDetailsService{
-
+public class JapanUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -21,8 +20,4 @@ public class JapanUserDetailsService implements UserDetailsService{
 
     }
 
-
-    
-
-    
 }

@@ -14,7 +14,6 @@ import com.japanese.nihongobase.dto.ReqRes;
 import com.japanese.nihongobase.entity.User;
 import com.japanese.nihongobase.repository.UserRepository;
 
-
 @Service
 public class UserManagementSevice {
     @Autowired
@@ -36,7 +35,7 @@ public class UserManagementSevice {
             user.setRole("USER");
 
             User userResult = userRepository.save(user);
-            if(userResult.getUserId()>0){
+            if (userResult.getUserId() > 0) {
                 resp.setUser(userResult);
                 resp.setMessage("User save Successfully");
                 resp.setStatusCode(200);
@@ -49,13 +48,12 @@ public class UserManagementSevice {
         return resp;
     }
 
-
-    public ReqRes login (ReqRes loginReqRes){
+    public ReqRes login(ReqRes loginReqRes) {
         ReqRes response = new ReqRes();
         try {
             authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginReqRes.getEmail()
-                ,loginReqRes.getPassword()));
+                    .authenticate(
+                            new UsernamePasswordAuthenticationToken(loginReqRes.getEmail(), loginReqRes.getPassword()));
 
             var user = userRepository.findByEmail(loginReqRes.getEmail()).orElseThrow();
             var jwt = jwtUtils.generateToken(user);
@@ -72,10 +70,9 @@ public class UserManagementSevice {
         return response;
     }
 
-
-    public ReqRes refreshToken(ReqRes refreshTokenReqiest){
+    public ReqRes refreshToken(ReqRes refreshTokenReqiest) {
         ReqRes response = new ReqRes();
-        try{
+        try {
             String email = jwtUtils.extractUsername(refreshTokenReqiest.getToken());
             User users = userRepository.findByEmail(email).orElseThrow();
             if (jwtUtils.isTokenValid(refreshTokenReqiest.getToken(), users)) {
@@ -89,13 +86,12 @@ public class UserManagementSevice {
             response.setStatusCode(200);
             return response;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage(e.getMessage());
             return response;
         }
     }
-
 
     public ReqRes getAllUsers() {
         ReqRes reqRes = new ReqRes();
@@ -118,7 +114,6 @@ public class UserManagementSevice {
         }
     }
 
-
     public ReqRes getUsersById(Integer id) {
         ReqRes reqRes = new ReqRes();
         try {
@@ -132,7 +127,6 @@ public class UserManagementSevice {
         }
         return reqRes;
     }
-
 
     public ReqRes deleteUser(Integer userId) {
         ReqRes reqRes = new ReqRes();
@@ -161,7 +155,7 @@ public class UserManagementSevice {
                 User existingUser = userOptional.get();
                 existingUser.setEmail(updatedUser.getEmail());
                 existingUser.setUsername(updatedUser.getUsername());
-            
+
                 // Check if password is present in the request
                 if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
                     // Encode the password and update it
@@ -183,8 +177,7 @@ public class UserManagementSevice {
         return reqRes;
     }
 
-
-    public ReqRes getMyInfo(String email){
+    public ReqRes getMyInfo(String email) {
         ReqRes reqRes = new ReqRes();
         try {
             Optional<User> userOptional = userRepository.findByEmail(email);
@@ -197,7 +190,7 @@ public class UserManagementSevice {
                 reqRes.setMessage("User not found for update");
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             reqRes.setStatusCode(500);
             reqRes.setMessage("Error occurred while getting user info: " + e.getMessage());
         }

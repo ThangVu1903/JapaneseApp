@@ -36,12 +36,12 @@ class _Login extends State<Login> {
             child: Column(
               children: [
                 Padding(
-                    padding: const EdgeInsets.only(top: 90),
+                    padding: const EdgeInsets.only(top: 60),
                     child: Image.asset('asset/images/logo.png')),
                 const Padding(
                   padding: EdgeInsets.only(top: 20, bottom: 40),
                   child: Text(
-                    "LOGIN",
+                    "ĐĂNG NHẬP",
                     style: TextStyle(
                         color: Colors.red,
                         fontSize: 32,
@@ -114,13 +114,15 @@ class _Login extends State<Login> {
                               Text(
                                 'Đăng nhập ',
                                 style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.bold),
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
                               ),
                             ]),
                       )),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 40.0),
+                  padding: const EdgeInsets.only(bottom: 10),
                   child: InkWell(
                     child: const Text(
                       'Tạo tài khoản ?',
@@ -153,14 +155,17 @@ class _Login extends State<Login> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 20),
+                  padding: const EdgeInsets.only(top: 10),
                   child: Column(
                     children: [
                       IconButton(
-                          onPressed: () {},
-                          icon: Image.asset(
-                            "asset/icons/google.png",
-                          )),
+                        onPressed: () {},
+                        icon: Image.asset(
+                          "asset/icons/google.png",
+                          width: 40,
+                          height: 40,
+                        ),
+                      ),
                       const Text(
                         "Đăng nhập với Google",
                         style: TextStyle(fontStyle: FontStyle.italic),

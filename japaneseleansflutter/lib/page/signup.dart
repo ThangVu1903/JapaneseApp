@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:japaneseleansflutter/constants/colors.dart';
 
 class signup extends StatelessWidget {
   const signup({super.key});
@@ -12,7 +13,7 @@ class signup extends StatelessWidget {
         child: Container(
           width: size.width,
           height: size.height,
-          color: const Color.fromARGB(156, 255, 200, 91),
+          color: yellow_1,
           child: Column(
             children: [
               Padding(
@@ -21,7 +22,7 @@ class signup extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.only(top: 20, bottom: 40),
                 child: Text(
-                  "LOGIN",
+                  "ĐĂNG KÝ",
                   style: TextStyle(
                       color: Colors.red,
                       fontSize: 32,
@@ -35,20 +36,20 @@ class signup extends StatelessWidget {
                 ),
               ),
               inputText(
-                  'Enter your email',
+                  'Nhập email ...',
                   const Icon(
                     Icons.email,
                     color: Color.fromRGBO(18, 84, 132, 0.612),
                   )),
               inputText(
-                'Enter Password',
+                'Nhập mật khẩu',
                 const Icon(
                   Icons.key,
                   color: Color.fromRGBO(16, 75, 118, 0.612),
                 ),
               ),
               inputText(
-                'Enter Password again',
+                'Nhập lại mật khẩu',
                 const Icon(
                   Icons.key,
                   color: Color.fromRGBO(16, 75, 118, 0.612),
@@ -70,7 +71,7 @@ class signup extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Create account ',
+                              'Tạo',
                               style: TextStyle(
                                   fontSize: 24, fontWeight: FontWeight.bold),
                             ),

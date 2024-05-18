@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/user")
-public class courseController {
+public class CourseController {
     @Autowired
     CourseService courseService;
 

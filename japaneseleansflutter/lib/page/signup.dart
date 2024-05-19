@@ -6,6 +6,10 @@ class signup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passController = TextEditingController();
+    final TextEditingController repassController = TextEditingController();
+
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -36,12 +40,14 @@ class signup extends StatelessWidget {
                 ),
               ),
               inputText(
+                  emailController,
                   'Nhập email ...',
                   const Icon(
                     Icons.email,
                     color: Color.fromRGBO(18, 84, 132, 0.612),
                   )),
               inputText(
+                passController,
                 'Nhập mật khẩu',
                 const Icon(
                   Icons.key,
@@ -49,6 +55,7 @@ class signup extends StatelessWidget {
                 ),
               ),
               inputText(
+                repassController,
                 'Nhập lại mật khẩu',
                 const Icon(
                   Icons.key,
@@ -63,7 +70,9 @@ class signup extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromRGBO(16, 75, 118, 0.612),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      
+                    },
                     child: const SizedBox(
                       height: 55,
                       width: 340,
@@ -73,7 +82,9 @@ class signup extends StatelessWidget {
                             Text(
                               'Tạo',
                               style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: white_2),
                             ),
                           ]),
                     )),
@@ -85,7 +96,7 @@ class signup extends StatelessWidget {
     );
   }
 
-  inputText(String lable, Widget icon) {
+  inputText(TextEditingController controller, String lable, Widget icon) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 20),
       child: Material(
@@ -96,6 +107,7 @@ class signup extends StatelessWidget {
         elevation: 18,
         shadowColor: Colors.grey,
         child: TextField(
+          controller: controller,
           style: const TextStyle(fontSize: 20),
           decoration: InputDecoration(
               filled: true,

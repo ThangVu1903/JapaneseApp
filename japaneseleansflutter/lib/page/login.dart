@@ -1,10 +1,9 @@
-import 'dart:convert';
+import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:japaneseleansflutter/constants/colors.dart';
 import 'package:japaneseleansflutter/page/home.dart';
 import 'package:japaneseleansflutter/page/signup.dart';
-import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -215,72 +214,104 @@ class _Login extends State<Login> {
     );
   }
 
+  bool isValidEmail(String email) {
+    // Sử dụng regular expression để kiểm tra định dạng email
+    final RegExp emailRegExp = RegExp(
+      r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+',
+    );
+    return emailRegExp.hasMatch(email);
+  }
+
+  bool isValidPassword(String password) {
+    // Kiểm tra độ dài mật khẩu, thêm các kiểm tra khác nếu cần
+    return password.length >= 4;
+  }
+
   Future<void> onSignInclicked() async {
     FocusScope.of(context).unfocus();
-    //Kiểm tra tính hợp lệ của địa chỉ email và mật khẩu
-    // if (_emailController.text.isEmpty ||
-    //     _emailController.text.contains("@") ||
-    //     _passController.text.isEmpty) {
-    //   showDialog(
-    //       context: context,
-    //       builder: (BuildContext context) {
-    //         return AlertDialog(
-    //           title: const Text("Lỗi !"),
-    //           content:
-    //               const Text("Vui lòng nhập địa chỉ email và mật khẩu hợp lệ "),
-    //           actions: <Widget>[
-    //             TextButton(
-    //                 onPressed: () {
-    //                   Navigator.of(context).pop();
-    //                 },
-    //                 child: const Text("Đóng"))
-    //           ],
-    //         );
-    //       });
-    //   return;
-    // }
 
-    // Tạo dữ liệu
-    const String apiUrl = 'http://localhost:8088/auth/login';
-    // final Map<String, String> headers = {'Content-Type': 'application/json'};
-    final Map<String, String> body = {
-      'email': _emailController.text,
-      'password': _passController.text,
-    };
-
-    final http.Response response = await http.post(
-      Uri.parse(apiUrl),
-      // headers: headers,
-      body: body,
-    );
-
-    final Map<String, dynamic> responseData = jsonDecode(response.body);
-    // Xử lý phản hồi từ API
-    if (response.statusCode == 200) {
-      //đăng nhập thành công
-      //lưu token vào bộ nhớ cục bộ và chuyển hướng
-      // var jsonResponse = jsonDecode(response.body);
-      // var token = jsonResponse['token'];
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
-      // await prefs.setString('token', token);
-      final String token = responseData['token'];
-      final String refreshToken = responseData['refreshToken'];
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => Home()),
-      );
-    } else {
-      // Đăng nhập thất bại
-      final String message = responseData['message'];
-      // Hiển thị thông báo lỗi cho người dùng
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Đăng nhập không thành công: $message'),
-          backgroundColor: Colors.red,
-        ),
-      );
+    if (!isValidEmail(_emailController.text)) {
+      showErrorMessage("Địa chỉ email không hợp lệ.");
+      return;
     }
+
+    if (!isValidPassword(_passController.text)) {
+      showErrorMessage("Mật khẩu không hợp lệ. Phải có ít nhất 4 ký tự.");
+      return;
+    }
+    showLoadingSpinner();
+
+    try {
+      const String apiUrl = 'http://192.168.1.213:8088/auth/login';
+
+      final Map<String, String> body = {
+        'email': _emailController.text,
+        'password': _passController.text,
+      };
+
+      Dio dio = Dio();
+      final response = await dio.post(apiUrl, data: body);
+      hideLoadingSpinner();
+      // Xử lý phản hồi từ API
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        if (responseData != null && responseData['token'] != null) {
+          // Lấy token và refreshToken từ responseData, nếu có
+          // final String token = responseData['token'];
+          // final String refreshToken = responseData['refreshToken'];
+
+          showSuccessSnackBar('Đăng nhập thành công');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const Home()),
+          );
+        } else {
+          // Xử lý trường hợp dữ liệu trả về null hoặc không có token
+          showErrorMessage(
+              "Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.");
+        }
+      } else {
+        // Đăng nhập thất bại, hiển thị thông báo lỗi
+        final String message = response.data['message'] ??
+            'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.';
+        showErrorMessage(message);
+      }
+    } catch (e) {
+      // Xử lý lỗi kết nối hoặc lỗi không xác định
+      print("Đã xảy ra lỗi: $e");
+      showErrorMessage("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+    }
+  }
+
+  void showLoadingSpinner() {
+    showDialog(
+      context: context,
+      barrierDismissible:
+          false, // Ngăn người dùng đóng dialog bằng cách nhấp bên ngoài
+      builder: (BuildContext context) {
+        return const Center(
+          child:
+              CircularProgressIndicator(), // Hiển thị tiến trình quay (spinner)
+        );
+      },
+    );
+  }
+
+  void hideLoadingSpinner() {
+    Navigator.of(context).pop(); // Ẩn dialog tiến trình quay (spinner)
+  }
+
+  void showSuccessSnackBar(String message) {
+    final snackBar = SnackBar(
+      duration: const Duration(seconds: 1),
+      content: Text(
+        message,
+        style: const TextStyle(color: Colors.black),
+      ),
+      backgroundColor: white_1,
+      // Màu nền xanh cho SnackBar thành công
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void showErrorMessage(String message) {
@@ -289,7 +320,10 @@ class _Login extends State<Login> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Lỗi !"),
-          content: Text(message),
+          content: Text(
+            message,
+            style: const TextStyle(color: Colors.red),
+          ),
           actions: <Widget>[
             TextButton(
               onPressed: () {

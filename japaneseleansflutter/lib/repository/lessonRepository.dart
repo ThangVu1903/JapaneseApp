@@ -7,7 +7,7 @@ class LessonRepository {
   Future<List<Lesson>> fetchLessons(String courseName) async {
     try {
       final response = await _dio.get(
-        'http://192.168.1.213:8088/public/api/courses/$courseName/lesson',
+        'http://192.168.1.216:8088/public/api/courses/$courseName/lesson',
       );
 
       if (response.statusCode == 200) {

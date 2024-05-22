@@ -1,6 +1,8 @@
-import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:japaneseleansflutter/constants/colors.dart';
 import 'package:japaneseleansflutter/page/home.dart';
 import 'package:japaneseleansflutter/page/signup.dart';
@@ -231,55 +233,72 @@ class _Login extends State<Login> {
     FocusScope.of(context).unfocus();
 
     if (!isValidEmail(_emailController.text)) {
-      showErrorMessage("Địa chỉ email không hợp lệ.");
+      Fluttertoast.showToast(
+        msg: "Địa chỉ email không hợp lệ",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
       return;
     }
 
     if (!isValidPassword(_passController.text)) {
-      showErrorMessage("Mật khẩu không hợp lệ. Phải có ít nhất 4 ký tự.");
+      Fluttertoast.showToast(
+        msg: "Mật khẩu không hợp lệ. Phải có ít nhất 4 ký tự.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
       return;
     }
+
     showLoadingSpinner();
 
     try {
-      const String apiUrl = 'http://192.168.1.213:8088/auth/login';
+      const String apiUrl = 'http://192.168.1.216:8088/auth/login';
 
       final Map<String, String> body = {
         'email': _emailController.text,
         'password': _passController.text,
       };
 
-      Dio dio = Dio();
-      final response = await dio.post(apiUrl, data: body);
-      hideLoadingSpinner();
-      // Xử lý phản hồi từ API
-      if (response.statusCode == 200) {
-        final responseData = response.data;
-        if (responseData != null && responseData['token'] != null) {
-          // Lấy token và refreshToken từ responseData, nếu có
-          // final String token = responseData['token'];
-          // final String refreshToken = responseData['refreshToken'];
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body),
+      );
+      dynamic body1 = jsonEncode(response.body);
 
-          showSuccessSnackBar('Đăng nhập thành công');
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const Home()),
-          );
-        } else {
-          // Xử lý trường hợp dữ liệu trả về null hoặc không có token
-          showErrorMessage(
-              "Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.");
-        }
-      } else {
-        // Đăng nhập thất bại, hiển thị thông báo lỗi
-        final String message = response.data['message'] ??
-            'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.';
-        showErrorMessage(message);
+       hideLoadingSpinner();
+
+      final responseBody = jsonDecode(response.body);
+
+      switch (responseBody['statusCode']) {
+        case 200:
+          if (responseBody['token'] != null) {
+            showToast("Đăng nhập thành công!", Colors.green);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const Home()),
+            );
+          }
+          break;
+        case 400:
+          showToast("Không tìm thấy email", Colors.red);
+          break;
+        case 401:
+          showToast("Sai mật khẩu", Colors.red);
+          break;
+        default:
+          final String message = responseBody['message'] ??
+              'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.';
+          showToast('Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.', Colors.red);
       }
     } catch (e) {
-      // Xử lý lỗi kết nối hoặc lỗi không xác định
       print("Đã xảy ra lỗi: $e");
-      showErrorMessage("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+      showToast('Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.', Colors.red);
     }
   }
 
@@ -294,6 +313,16 @@ class _Login extends State<Login> {
               CircularProgressIndicator(), // Hiển thị tiến trình quay (spinner)
         );
       },
+    );
+  }
+  void showToast(String message, Color backgroundColor) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      backgroundColor: backgroundColor,
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,13 @@ public class UserManagementSevice {
     public ReqRes register(ReqRes registrationRequest) {
         ReqRes resp = new ReqRes();
         try {
+            // Check if email already exists
+            if (userRepository.existsByEmail(registrationRequest.getEmail())) {
+                resp.setStatusCode(400);
+                resp.setMessage("Email này đã có người đăng ký, vui lòng dùng email khác");
+                System.out.println(resp);
+                return resp;
+            }
             User user = new User();
             user.setEmail(registrationRequest.getEmail());
             user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
@@ -39,11 +47,13 @@ public class UserManagementSevice {
                 resp.setUser(userResult);
                 resp.setMessage("User save Successfully");
                 resp.setStatusCode(200);
+                System.out.println(resp);
             }
 
         } catch (Exception e) {
             resp.setStatusCode(500);
             resp.setError(e.getMessage());
+            System.out.println(resp);
         }
         return resp;
     }
@@ -51,6 +61,20 @@ public class UserManagementSevice {
     public ReqRes login(ReqRes loginReqRes) {
         ReqRes response = new ReqRes();
         try {
+            // Check if email exists
+            if (!userRepository.existsByEmail(loginReqRes.getEmail())) {
+                response.setStatusCode(400);
+                response.setMessage("Không tìm thấy email");
+                return response;
+            }
+            try {
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(loginReqRes.getEmail(), loginReqRes.getPassword()));
+            } catch (AuthenticationException e) {
+                response.setStatusCode(401); // Unauthorized
+                response.setMessage("Thông tin mật khẩu không chính xác");
+                return response;
+            }
             authenticationManager
                     .authenticate(
                             new UsernamePasswordAuthenticationToken(loginReqRes.getEmail(), loginReqRes.getPassword()));

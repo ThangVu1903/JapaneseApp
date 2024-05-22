@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:japaneseleansflutter/component/flascard.dart';
+import 'package:japaneseleansflutter/page/home.dart';
 import 'package:japaneseleansflutter/page/login.dart';
 
 void main() {
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const Login(),
+      home:  Home(),
     );
   }
 }

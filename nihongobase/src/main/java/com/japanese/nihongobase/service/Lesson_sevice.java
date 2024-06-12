@@ -22,7 +22,7 @@ public class Lesson_sevice implements Lesson_seviceIpmt {
         for(Object[] row : resuList){
             Lesson lesson = new Lesson();
             lesson.setLesson_id((Integer) row[0]);
-            lesson.setLesson_number((int) row[1]);
+            lesson.setLessonNumber((int) row[1]);
             lesson.setLesson_name((String) row[2]);
             lessonList.add(lesson);
         }

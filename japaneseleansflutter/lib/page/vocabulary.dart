@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:japaneseleansflutter/component/exercise.dart';
 import 'package:japaneseleansflutter/component/listVocabulary.dart';
 import 'package:japaneseleansflutter/constants/colors.dart';
 import 'package:japaneseleansflutter/component/flascard.dart';
@@ -65,8 +66,32 @@ class Vocabulary extends StatelessWidget {
     );
   }
 
-  handleExercise() {
-    print("exercise");
+  handleExercise(BuildContext context) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return ExerciseScreen(
+            type: "vocabulary",
+            lessonNumber: lessonNumber,
+          );
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.ease;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -245,7 +270,7 @@ class Vocabulary extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    handleExercise();
+                    handleExercise(context);
                   },
                   child: Container(
                     width: size.width * 2 / 5,

@@ -3,13 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:japaneseleansflutter/component/navBar.dart';
 import 'package:japaneseleansflutter/constants/colors.dart';
 import 'package:japaneseleansflutter/repository/lessonRepository.dart';
+import 'package:provider/provider.dart';
 
 import '../component/course4.dart';
 import '../component/course5.dart';
+import '../model/user.dart';
 import 'listLesson.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  String username;
+  String email;
+  Home({required this.username, required this.email, super.key});
 
   @override
   State<Home> createState() => _Home();
@@ -20,12 +24,17 @@ class _Home extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    int? userId = Provider.of<User>(context, listen: false).userId;
+    print(userId);
     final Size size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: _onBackPressed, // thoát ứng dụng
       child: SafeArea(
         child: Scaffold(
-            drawer: const NavBar(),
+            drawer: NavBar(
+              username: widget.username,
+              email: widget.email,
+            ),
             appBar: AppBar(
               backgroundColor: yellow_1,
               title: const Text(
@@ -44,6 +53,7 @@ class _Home extends State<Home> {
                                   textAlign: TextAlign.center,
                                 ),
                                 content: Container(
+                                  height: size.height * 1 / 2,
                                   color: white_1,
                                 ),
                               ));

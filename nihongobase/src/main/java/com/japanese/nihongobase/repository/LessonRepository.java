@@ -14,8 +14,8 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 
     @Query(value = "SELECT l.lesson_id, l.lesson_number, l.lesson_name " +
             "FROM Course c " +
-            "JOIN Lesson l ON c.course_id = l.course.course_id " +
-            "WHERE c.course_name = :courseName")
+            "JOIN Lesson l ON c.course_id = l.course_id " +
+            "WHERE c.course_name = :courseName", nativeQuery = true)
     List<Object[]> getLessonByCourseName(@Param("courseName") String courseName); // getlessonbyCourseName
 
 }

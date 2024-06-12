@@ -6,7 +6,7 @@ import 'package:japaneseleansflutter/model/grammarModel.dart';
 class GrammarRepository {
   Future<List<GrammarModel>> fetchGrammar(int lessonNumber) async {
     final response = await http.get(Uri.parse(
-        'http://192.168.1.216:8088/public/api/lesson/$lessonNumber/grammar'));
+        'http://192.168.1.215:8088/public/api/lesson/$lessonNumber/grammar'));
 
     print(response.body);
     if (response.statusCode == 200) {

@@ -11,7 +11,7 @@ import com.japanese.nihongobase.entity.Vocabulary;
 
 @Repository
 public interface VocabularyRepository extends JpaRepository<Vocabulary, Integer> {
-    @Query("SELECT v FROM Vocabulary v JOIN v.lesson l WHERE l.lesson_number = :lessonNumber")
+    @Query("SELECT v FROM Vocabulary v JOIN v.lesson l WHERE l.lessonNumber = :lessonNumber")
     List<Vocabulary> findVocabularyByLessonNumber(@Param("lessonNumber") int lesson_number);
 }
 

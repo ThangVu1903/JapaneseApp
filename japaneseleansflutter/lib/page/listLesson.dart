@@ -21,6 +21,7 @@ class LessonList extends StatelessWidget {
           "Cấp độ $courseName",
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 10),

@@ -6,7 +6,7 @@ import '../model/vocabularyModel.dart';
 class VocabularyRepository {
   Future<List<VocabularyModel>> fetchVocabulary(int lessonNumber) async {
     final response = await http.get(Uri.parse(
-        'http://192.168.1.216:8088/public/api/lesson/$lessonNumber/vocabulary'));
+        'http://192.168.1.215:8088/public/api/lesson/$lessonNumber/vocabulary'));
 
     print(response.body);
     if (response.statusCode == 200) {

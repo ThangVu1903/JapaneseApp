@@ -75,21 +75,34 @@ public class UserManagementSevice {
                 response.setMessage("Thông tin mật khẩu không chính xác");
                 return response;
             }
-            authenticationManager
-                    .authenticate(
-                            new UsernamePasswordAuthenticationToken(loginReqRes.getEmail(), loginReqRes.getPassword()));
 
-            var user = userRepository.findByEmail(loginReqRes.getEmail()).orElseThrow();
-            var jwt = jwtUtils.generateToken(user);
-            var refeshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
-            response.setStatusCode(200);
+            // Get user details
+            User user = userRepository.findByEmail(loginReqRes.getEmail())
+                    .orElseThrow(() -> new Exception("User not found"));
+
+            // Generate JWT token
+            String jwt = jwtUtils.generateToken(user);
+            String refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
+
+            // Set common response details
             response.setToken(jwt);
-            response.setRefeshToken(refeshToken);
+            response.setRefeshToken(refreshToken);
             response.setExpirationTime("24Hrs");
-            response.setMessage("Successfull Logged In");
+            response.setMessage("Successfully Logged In");
+            response.setEmail(user.getEmail());
+            response.setUsername(user.getUsername());
+            response.setUser(user);
+
+            // Check if the user is an admin
+            if ("ADMIN".equals(user.getRole())) {
+                response.setStatusCode(201); // Special status code for admin
+                response.setMessage("Welcome Admin");
+            } else {
+                response.setStatusCode(200); // Normal status code for regular users
+            }
         } catch (Exception e) {
             response.setStatusCode(500);
-            response.setMessage(e.getMessage());
+            response.setMessage("Login error: " + e.getMessage());
         }
         return response;
     }

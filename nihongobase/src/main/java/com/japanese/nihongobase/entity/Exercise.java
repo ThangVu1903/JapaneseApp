@@ -1,5 +1,7 @@
 package com.japanese.nihongobase.entity;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,21 +16,26 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "lesson")
+@Table(name = "exercise")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Lesson {
+public class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer lesson_id;
+    @Column(name = "exercise_id", nullable = false)
+    private Integer excercise_id;
 
     @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
-    private Course course;
+    @JoinColumn(name = "lesson_id", nullable = false)
+    private Lesson lesson;
+    private String type;
+    private int question_number;
+    private String kanji_question;
+    private String question_content;
+    private String option1;
+    private String option2;
+    private String option3;
+    private int correct_option;
 
-    @Column(name = "lesson_number")
-    private int lessonNumber;
     
-    private String lesson_name;
-
 }

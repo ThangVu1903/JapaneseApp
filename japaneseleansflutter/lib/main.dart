@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:japaneseleansflutter/component/flascard.dart';
-import 'package:japaneseleansflutter/page/home.dart';
 import 'package:japaneseleansflutter/page/login.dart';
+import 'package:provider/provider.dart';
+
+import 'model/user.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => User(email: '', password: ''), // Khởi tạo User với thông tin rỗng
+    child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,7 +23,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home:  Home(),
+      home: const Login(),
     );
   }
 }

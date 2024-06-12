@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 
 class CourseComponent_N5 extends StatelessWidget {
-  const CourseComponent_N5({
+  const  CourseComponent_N5({
     super.key,
     required this.size,
     required this.onPressed

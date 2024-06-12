@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:japaneseleansflutter/constants/colors.dart';
-import 'package:japaneseleansflutter/page/home.dart';
 import 'package:japaneseleansflutter/page/setting.dart';
 
+import '../page/login.dart';
+
 class NavBar extends StatelessWidget {
-  const NavBar({super.key});
+  String username;
+  String email;
+  NavBar({required this.username, required this.email, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +15,8 @@ class NavBar extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const UserAccountsDrawerHeader(
-            accountName: Text(
+          UserAccountsDrawerHeader(
+            accountName: const Text(
               "XIN CHÀO",
               style: TextStyle(
                 color: Color.fromARGB(255, 0, 0, 0),
@@ -22,32 +25,21 @@ class NavBar extends StatelessWidget {
                 fontStyle: FontStyle.italic,
               ),
             ),
-            accountEmail: Text("Vũ Thắng",
-                style: TextStyle(color: Colors.black, fontSize: 20)),
-            decoration: BoxDecoration(
-                color: yellow_1,
-                image: DecorationImage(
-                    image: AssetImage("asset/images/background_drawer.jpeg"),
-                    fit: BoxFit.cover)),
+            accountEmail: Text(username,
+                style: const TextStyle(color: Colors.black, fontSize: 20)),
+            decoration: const BoxDecoration(
+              color: yellow_1,
+            ),
           ),
           ListTile(
             leading: const Icon(Icons.book),
             splashColor: yellow_1,
             title: const Text("Khoá học"),
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Home()));
-            },
+            onTap: () {},
           ),
           ListTile(
             leading: const Icon(Icons.shopping_bag),
             title: const Text("Cửa hàng"),
-            onTap: () {},
-            splashColor: yellow_1,
-          ),
-          ListTile(
-            leading: const Icon(Icons.bookmark),
-            title: const Text("Hướng dẫn"),
             onTap: () {},
             splashColor: yellow_1,
           ),
@@ -60,8 +52,46 @@ class NavBar extends StatelessWidget {
             },
             splashColor: yellow_1,
           ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text("Đăng xuất"),
+            onTap: () {
+              _showLogoutConfirmationDialog(context);
+            },
+            splashColor: yellow_1,
+          ),
         ],
       ),
+    );
+  }
+
+  void _showLogoutConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Đăng xuất'),
+          content: const Text('Bạn có muốn đăng xuất không ?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Không'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Có'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Login()),
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

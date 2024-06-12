@@ -21,12 +21,10 @@ public class UserController {
     @Autowired
     private UserManagementSevice userManagementSevice;
 
-
     @PostMapping("/auth/register")
     public ResponseEntity<ReqRes> register(@RequestBody ReqRes reg) {
         return ResponseEntity.ok(userManagementSevice.register(reg));
     }
-
 
     @PostMapping("/auth/login")
     public ResponseEntity<ReqRes> login(@RequestBody ReqRes reg) {
@@ -37,7 +35,7 @@ public class UserController {
     public ResponseEntity<ReqRes> refeshToken(@RequestBody ReqRes reg) {
         return ResponseEntity.ok(userManagementSevice.refreshToken(reg));
     }
-    
+
     @GetMapping("/admin/get-all-users")
     public ResponseEntity<ReqRes> getAllUsers() {
         return ResponseEntity.ok(userManagementSevice.getAllUsers());
@@ -50,25 +48,20 @@ public class UserController {
 
     @PutMapping("/admin/update/{userId}")
     public ResponseEntity<ReqRes> updateUser(@PathVariable Integer id, @RequestBody User user) {
-        return ResponseEntity.ok(userManagementSevice.updateUser(id,user));
+        return ResponseEntity.ok(userManagementSevice.updateUser(id, user));
     }
 
     @GetMapping("/adminuser/get-profile")
     public ResponseEntity<ReqRes> getMyProfile() {
         Authentication authentication = (Authentication) SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getUsername();
-        ReqRes response =  userManagementSevice.getMyInfo(email);
+        ReqRes response = userManagementSevice.getMyInfo(email);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
     @DeleteMapping("/admin/delete/{userId}")
-    public ResponseEntity<ReqRes> deleteUser(@PathVariable Integer id){
+    public ResponseEntity<ReqRes> deleteUser(@PathVariable Integer id) {
         return ResponseEntity.ok(userManagementSevice.deleteUser(id));
     }
 
-
-    
-
-
-    
 }

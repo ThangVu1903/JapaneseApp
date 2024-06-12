@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:japaneseleansflutter/model/grammarModel.dart';
 import 'package:japaneseleansflutter/repository/grammarRepository.dart';
 
+import '../component/exercise.dart';
 import '../constants/colors.dart';
 
 class Grammar extends StatefulWidget {
@@ -31,6 +32,35 @@ class _GrammarState extends State<Grammar> {
         await repository.fetchGrammar(widget.lessonNumber);
     _isOpen = List<bool>.filled(grammars.length, false);
     return grammars;
+  }
+
+  handleExercise(BuildContext context) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return ExerciseScreen(
+            type: "grammar",
+            lessonNumber: widget.lessonNumber,
+          );
+        },
+        settings: const RouteSettings(name: "Grammar"),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.ease;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -76,7 +106,9 @@ class _GrammarState extends State<Grammar> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    handleExercise(context);
+                  },
                   child: Container(
                     width: size.width * 2 / 5,
                     height: size.height * 1 / 5 * 4 / 5,
@@ -172,7 +204,8 @@ class _GrammarState extends State<Grammar> {
                                   children: [
                                     Text(
                                       '${index + 1}. ${grammar.structure}',
-                                      style: const TextStyle(color: white_1),
+                                      style: const TextStyle(
+                                          color: white_1, fontSize: 15),
                                     ),
                                   ],
                                 ),

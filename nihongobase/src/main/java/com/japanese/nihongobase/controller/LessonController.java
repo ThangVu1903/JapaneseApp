@@ -20,9 +20,8 @@ public class LessonController {
     private Lesson_sevice lesson_sevice;
 
     @GetMapping("courses/{course_name}/lesson")
-    public ResponseEntity<List<Lesson>> getLessonByCourseName(@PathVariable String course_name) {
-        List<Lesson> lessons = lesson_sevice.getLessonByCourseName(course_name);
-        return ResponseEntity.ok(lessons);
+    public List<Lesson> getLessonByCourseName(@PathVariable String course_name) {
+        return lesson_sevice.getLessonByCourseName(course_name);
     }
 
 }

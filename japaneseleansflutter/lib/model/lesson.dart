@@ -6,7 +6,6 @@ class Lesson {
 
   factory Lesson.formJson(Map<String, dynamic> json) {
     return Lesson(
-        lesson_number: json['lesson_number'],
-        lesson_name: json['lesson_name']);
+        lesson_number: json['lessonNumber'], lesson_name: json['lesson_name']);
   }
 }

@@ -53,14 +53,26 @@ class _DetailLessonState extends State<DetailLesson>
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children:  [
-          Vocabulary(lessonName: widget.lessonName, lessonNumber: widget.lessonNumber),
-           Grammar(lessonName: widget.lessonName, lessonNumber: widget.lessonNumber,),
-          const TestLesson(),
-        ],
-      ),
+      body: Stack(children: [
+        TabBarView(
+          controller: _tabController,
+          children: [
+            Vocabulary(
+                lessonName: widget.lessonName,
+                lessonNumber: widget.lessonNumber),
+            Grammar(
+              lessonName: widget.lessonName,
+              lessonNumber: widget.lessonNumber,
+            ),
+             TestLesson(
+              lessonName: widget.lessonName,
+              lessonNumber: widget.lessonNumber,
+            ),
+            //DraggableChatBubble(),
+            //
+          ],
+        ),
+      ]),
       bottomNavigationBar: Container(
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         decoration: BoxDecoration(

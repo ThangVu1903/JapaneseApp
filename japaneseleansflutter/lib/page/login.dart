@@ -3,9 +3,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:japaneseleansflutter/admin/homeAdmin.dart';
 import 'package:japaneseleansflutter/constants/colors.dart';
+import 'package:japaneseleansflutter/model/user.dart';
 import 'package:japaneseleansflutter/page/home.dart';
 import 'package:japaneseleansflutter/page/signup.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -257,7 +260,7 @@ class _Login extends State<Login> {
     showLoadingSpinner();
 
     try {
-      const String apiUrl = 'http://192.168.1.216:8088/auth/login';
+      const String apiUrl = 'http://192.168.1.215:8088/auth/login';
 
       final Map<String, String> body = {
         'email': _emailController.text,
@@ -271,17 +274,45 @@ class _Login extends State<Login> {
       );
       dynamic body1 = jsonEncode(response.body);
 
-       hideLoadingSpinner();
+      hideLoadingSpinner();
 
       final responseBody = jsonDecode(response.body);
 
       switch (responseBody['statusCode']) {
+        case 201:
+          if (responseBody['token'] != null) {
+            String username = responseBody['username'];
+            String email = responseBody['email'];
+            int userId = responseBody['user']['userId'];
+            //lưu userID từ server trả về và provider
+            Provider.of<User>(context, listen: false).userId = userId;
+
+            showToast("Đăng nhập Admin thành công!", Colors.green);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => AdminDashboard(
+                        username: username,
+                        email: email,
+                      )),
+            );
+          }
+          break;
         case 200:
           if (responseBody['token'] != null) {
+            String username = responseBody['username'];
+            String email = responseBody['email'];
+            int userId = responseBody['user']['userId'];
+            //lưu userID từ server trả về vào provider
+            Provider.of<User>(context, listen: false).userId = userId;
             showToast("Đăng nhập thành công!", Colors.green);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const Home()),
+              MaterialPageRoute(
+                  builder: (_) => Home(
+                        username: username,
+                        email: email,
+                      )),
             );
           }
           break;
@@ -294,11 +325,15 @@ class _Login extends State<Login> {
         default:
           final String message = responseBody['message'] ??
               'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.';
-          showToast('Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.', Colors.red);
+          showToast(
+              'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.',
+              Colors.red);
       }
     } catch (e) {
       print("Đã xảy ra lỗi: $e");
-      showToast('Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.', Colors.red);
+      showToast(
+          'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.',
+          Colors.red);
     }
   }
 
@@ -315,6 +350,7 @@ class _Login extends State<Login> {
       },
     );
   }
+
   void showToast(String message, Color backgroundColor) {
     Fluttertoast.showToast(
       msg: message,

@@ -6,7 +6,7 @@ import '../model/Lesson.dart';
 class LessonRepository {
   Future<List<Lesson>> fetchLessons(String courseName) async {
     final response = await http.get(Uri.parse(
-        'http://192.168.1.215:8088/public/api/courses/$courseName/lesson'));
+        'http://192.168.1.24:8088/public/api/courses/$courseName/lesson'));
 
     print(response.body);
     if (response.statusCode == 200) {

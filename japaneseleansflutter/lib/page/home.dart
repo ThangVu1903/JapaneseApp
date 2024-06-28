@@ -4,6 +4,7 @@ import 'package:japaneseleansflutter/component/navBar.dart';
 import 'package:japaneseleansflutter/constants/colors.dart';
 import 'package:japaneseleansflutter/repository/lessonRepository.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../component/course4.dart';
 import '../component/course5.dart';
@@ -21,6 +22,18 @@ class Home extends StatefulWidget {
 
 class _Home extends State<Home> {
   late final LessonRepository lessonRepository = LessonRepository();
+
+  @override
+  void initState() {
+    super.initState();
+    _logout();
+  }
+
+  Future<void> _logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('email');
+    await prefs.remove('password');
+  }
 
   @override
   Widget build(BuildContext context) {

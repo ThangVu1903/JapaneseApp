@@ -10,11 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.japanese.nihongobase.dto.ScoreDTO;
 import com.japanese.nihongobase.dto.UserScoreDTO;
-import com.japanese.nihongobase.entity.Lesson;
 import com.japanese.nihongobase.entity.Score;
-import com.japanese.nihongobase.entity.User;
-import com.japanese.nihongobase.repository.LessonRepository;
-import com.japanese.nihongobase.repository.UserRepository;
+
 import com.japanese.nihongobase.service.ScoreService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

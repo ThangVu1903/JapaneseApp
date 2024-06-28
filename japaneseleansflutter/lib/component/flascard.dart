@@ -176,7 +176,7 @@ class _FlashcardScreenState extends State<FlashcardScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                vocabularyModel.kanji,
+                vocabularyModel.kanji!,
                 style: const TextStyle(
                     fontSize: 36.0, fontWeight: FontWeight.bold),
               ),
@@ -194,13 +194,14 @@ class _FlashcardScreenState extends State<FlashcardScreen>
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
-                  vocabularyModel.example,
+                  vocabularyModel.example!= null ? vocabularyModel.example! : "", 
                   style: const TextStyle(fontSize: 24.0),
                 ),
               ),
               const SizedBox(height: 8.0),
               Text(
-                vocabularyModel.example_meanning,
+               
+                vocabularyModel.example_meanning!= null ? vocabularyModel.example_meanning! : "", 
                 style: const TextStyle(fontSize: 24.0),
               ),
             ],

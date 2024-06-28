@@ -1,4 +1,6 @@
 class ExerciseModel {
+  final int exerciseId;
+  final int lessonId;
   final String type;
   final int questionNumber;
   final String questionContent;
@@ -9,6 +11,8 @@ class ExerciseModel {
   final int correctOption;
 
   ExerciseModel({
+    required this.exerciseId,
+    required this.lessonId,
     required this.type,
     required this.questionNumber,
     required this.questionContent,
@@ -21,6 +25,8 @@ class ExerciseModel {
 
   factory ExerciseModel.fromJson(Map<String, dynamic> json) {
     return ExerciseModel(
+      exerciseId: json['excercise_id'],
+      lessonId: json['lesson']['lesson_id'],
       type: json['type'],
       questionNumber: json['question_number'],
       questionContent: json['question_content'],
@@ -30,5 +36,19 @@ class ExerciseModel {
       option3: json['option3'],
       correctOption: json['correct_option'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'lessonId': lessonId, // Chỉ gửi lessonId, không cần gửi cả object lesson
+      'type': type,
+      'questionNumber': questionNumber,
+      'questionContent': questionContent,
+      'kanjiQuestion': kanjiQuestion,
+      'option1': option1,
+      'option2': option2,
+      'option3': option3,
+      'correctOption': correctOption,
+    };
   }
 }

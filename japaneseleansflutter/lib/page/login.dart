@@ -9,6 +9,7 @@ import 'package:japaneseleansflutter/model/user.dart';
 import 'package:japaneseleansflutter/page/home.dart';
 import 'package:japaneseleansflutter/page/signup.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -22,6 +23,27 @@ class _Login extends State<Login> {
   final TextEditingController _passController = TextEditingController();
 
   late bool _showpassword = false;
+  bool _rememberMe = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email');
+    String? password = prefs.getString('password');
+    if (email != null && password != null) {
+      setState(() {
+        _emailController.text = email;
+        _passController.text = password;
+        _rememberMe = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -84,6 +106,18 @@ class _Login extends State<Login> {
                             : const Icon(Icons.visibility_off),
                         color: const Color.fromRGBO(16, 75, 118, 0.612)),
                     _showpassword),
+                SwitchListTile(
+                  title: const Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text("Nhớ mật khẩu"),
+                  ),
+                  value: _rememberMe,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _rememberMe = value;
+                    });
+                  },
+                ),
                 InkWell(
                   child: const Text(
                     'Quên mật khẩu ?',
@@ -260,7 +294,7 @@ class _Login extends State<Login> {
     showLoadingSpinner();
 
     try {
-      const String apiUrl = 'http://192.168.1.215:8088/auth/login';
+      const String apiUrl = 'http://192.168.1.24:8088/auth/login';
 
       final Map<String, String> body = {
         'email': _emailController.text,
@@ -334,6 +368,11 @@ class _Login extends State<Login> {
       showToast(
           'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.',
           Colors.red);
+    }
+    if (_rememberMe) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('email', _emailController.text);
+      await prefs.setString('password', _passController.text);
     }
   }
 

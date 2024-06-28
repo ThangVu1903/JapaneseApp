@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.japanese.nihongobase.dto.ScoreDTO;
 import com.japanese.nihongobase.dto.UserScoreDTO;
+import com.japanese.nihongobase.entity.Exercise;
 import com.japanese.nihongobase.entity.Lesson;
 import com.japanese.nihongobase.entity.Score;
 import com.japanese.nihongobase.entity.User;
@@ -39,9 +40,9 @@ public class ScoreService implements ScoreServiceIpmt {
     score.setTotal_score(scoreDTO.getTotalScore());
 
     return scoreRepository.save(score);
-}
+    }
 
-public List<UserScoreDTO> getHighestUserScoresByLessonId(Integer lessonId) {
+    public List<UserScoreDTO> getHighestUserScoresByLessonId(Integer lessonId) {
         List<Object[]> results = scoreRepository.findHighestUserScoresByLessonId(lessonId);
         List<UserScoreDTO> userScores = new ArrayList<>();
         for (Object[] result : results) {
@@ -51,4 +52,10 @@ public List<UserScoreDTO> getHighestUserScoresByLessonId(Integer lessonId) {
         }
         return userScores;
     }
-} 
+
+    
+
+
+
+}
+

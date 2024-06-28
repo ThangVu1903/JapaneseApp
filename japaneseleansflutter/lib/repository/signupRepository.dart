@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 class SignupRepository {
   Future<void> signUp(String email, String username, String password,
       BuildContext context) async {
-    const String apiUrl = 'http://192.168.1.215:8088/auth/register';
+    const String apiUrl = 'http://192.168.1.24:8088/auth/register';
     final Uri apiUri = Uri.parse(apiUrl);
     final Map<String, String> headers = {'Content-Type': 'application/json'};
     final Map<String, dynamic> body = {

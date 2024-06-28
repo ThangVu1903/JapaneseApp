@@ -75,7 +75,7 @@ class VocabularyList extends StatelessWidget {
                       style: const TextStyle(color: black, fontSize: 15),
                     ),
                     Text(
-                      vocabularies[index].kanji,
+                      vocabularies[index].kanji!,
                       style: const TextStyle(
                           color: black,
                           fontWeight: FontWeight.bold,

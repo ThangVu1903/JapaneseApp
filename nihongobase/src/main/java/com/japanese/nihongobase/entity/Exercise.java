@@ -37,5 +37,4 @@ public class Exercise {
     private String option3;
     private int correct_option;
 
-    
 }

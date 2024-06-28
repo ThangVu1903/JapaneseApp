@@ -244,10 +244,10 @@ class _GrammarState extends State<Grammar> {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      Text(grammar.example,
+                                      Text(grammar.example! ?? " ",
                                           style: const TextStyle(
                                               color: black, fontSize: 18)),
-                                      Text(grammar.example_meanning,
+                                      Text(grammar.example_meanning!??" " ,
                                           style: const TextStyle(
                                               color: black, fontSize: 18)),
                                     ],

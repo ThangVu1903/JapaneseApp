@@ -43,7 +43,7 @@ class _TestScreen extends State<TestScreen> {
     super.initState();
     _countdownController = StreamController<int>();
     futureExercises =
-        TestExerciseRepository().fetchTestExercise(widget.lessonNumber);
+        ExerciseRepository().fetchTestExercise(widget.lessonNumber);
     futureExercises.then((exercisesList) {
       setState(() {
         exercises = exercisesList;

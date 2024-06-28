@@ -5,7 +5,7 @@ import '../model/userScore.dart';
 
 Future<void> submitScore(int? userId, int lessonId, double totalScore) async {
   // Địa chỉ URL của API endpoint
-  final url = Uri.parse('http://192.168.1.215:8088/public/api/add/score');
+  final url = Uri.parse('http://192.168.1.24:8088/public/api/add/score');
 
   // Thực hiện POST request
   final response = await http.post(
@@ -36,7 +36,7 @@ Future<void> submitScore(int? userId, int lessonId, double totalScore) async {
 class ScoreRepository {
   Future<List<UserScore>> fetchUserScores(int lessonId) async {
     final response = await http.get(Uri.parse(
-        'http://192.168.1.215:8088/public/api/lesson/$lessonId/test/score'));
+        'http://192.168.1.24:8088/public/api/lesson/$lessonId/test/score'));
 
     if (response.statusCode == 200) {
       List<dynamic> scoresJson = json.decode(response.body);

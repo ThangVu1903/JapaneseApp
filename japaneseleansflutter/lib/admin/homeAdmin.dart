@@ -25,7 +25,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Admin'),
+        title: const Text('Admin'),
         centerTitle: true,
       ),
       drawer: Drawer(
